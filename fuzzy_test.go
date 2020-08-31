@@ -360,6 +360,21 @@ func TestAutocomplete(t *testing.T) {
 	}
 }
 
+func TestAutocompleteBig(t *testing.T) {
+	model := NewModel()
+	// Changing defaults for testing only, this is not advisable on production
+	model.SetThreshold(0)
+	model.SetDivergenceThreshold(1)
+	// Train multiple words simultaneously by passing an array of strings to the "Train" function
+	model.Train( []string{"bob", "your", "uncle", "dynamite", "delicate", "biggest", "big", "bigger", "aunty", "you're"})
+	//model.Train( []string{"big", "bigger"})
+	sug, err := model.Autocomplete("bi")
+	if err != nil {
+		t.Errorf("Autocomplete() returned an error: %s", err)
+	}
+	t.Logf("%+v\n", sug)
+}
+
 // Test to ensure query training begins to dominate over
 // corpus training when autocompleting
 func TestAutocompleteFromQueries(t *testing.T) {
